@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Windows / WSL 下載標記
+*:Zone.Identifier
+
+# Swift Package Manager / Xcode
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
+# xtool 建置產物（.app / .ipa）
+/xtool
+
+# 個人編輯器設定
+/.vscode
+
+# Android 版原始碼副本（另有獨立 repo）
+/src
+favicon.png

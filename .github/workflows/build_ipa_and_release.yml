@@ -1,0 +1,53 @@
+name: Build and Release IPA
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  XTOOL_VERSION: '1.21.0'
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        run: |
+          XCODE="$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Install xtool
+        run: |
+          curl -fsSL -o xtool.app.zip "https://github.com/xtool-org/xtool/releases/download/${XTOOL_VERSION}/xtool.app.zip"
+          ditto -x -k xtool.app.zip "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xtool.app/Contents/MacOS" >> "$GITHUB_PATH"
+
+      - name: Build Release App
+        run: |
+          xtool --version
+          xtool dev build --configuration release
+
+      - name: Set Version from Tag and Package IPA
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          APP="xtool/TaiwanFRP.app"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" "$APP/Info.plist"
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry "taiwanfrp-ios-${GITHUB_REF_NAME}-unsigned.ipa" Payload
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: taiwanfrp-ios-${{ github.ref_name }}-unsigned.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
