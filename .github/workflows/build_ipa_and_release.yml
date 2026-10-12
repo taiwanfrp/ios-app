@@ -14,6 +14,7 @@ env:
 jobs:
   build:
     runs-on: macos-26
+    timeout-minutes: 30
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,9 +29,10 @@ jobs:
         run: |
           curl -fsSL -o xtool.app.zip "https://github.com/xtool-org/xtool/releases/download/${XTOOL_VERSION}/xtool.app.zip"
           ditto -x -k xtool.app.zip "$RUNNER_TEMP"
-          echo "$RUNNER_TEMP/xtool.app/Contents/MacOS" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/xtool.app/Contents/Resources/bin" >> "$GITHUB_PATH"
 
       - name: Build Release App
+        timeout-minutes: 20
         run: |
           xtool --version
           xtool dev build --configuration release
