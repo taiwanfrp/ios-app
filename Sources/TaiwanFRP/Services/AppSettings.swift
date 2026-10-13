@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 enum AppTheme: String, CaseIterable, Identifiable {
     case system
@@ -40,9 +41,15 @@ enum AppTheme: String, CaseIterable, Identifiable {
         }
     }
 
+    /// 「系統」主題沒有自己的配色，而是依 iOS 目前的外觀套用「淺色」或「深色」主題。
+    /// 使用動態顏色，系統切換深淺色時會即時跟著變。
+    private func followingSystem(_ color: (AppTheme) -> Color) -> Color {
+        Color(light: color(.light), dark: color(.dark))
+    }
+
     var accentColor: Color {
         switch self {
-        case .system: .blue
+        case .system: followingSystem(\.accentColor)
         case .light: Color(hex: 0x6750A4)
         case .dark: Color(hex: 0xD0BCFF)
         case .blue: Color(hex: 0x58A6FF)
@@ -56,7 +63,8 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var onAccentColor: Color {
         switch self {
-        case .system, .light, .blueLight, .greenLight, .white: .white
+        case .system: followingSystem(\.onAccentColor)
+        case .light, .blueLight, .greenLight, .white: .white
         case .dark: Color(hex: 0x381E72)
         case .blue, .green, .oled: .black
         }
@@ -64,7 +72,7 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var secondaryColor: Color {
         switch self {
-        case .system: .orange
+        case .system: followingSystem(\.secondaryColor)
         case .light: Color(hex: 0x7D5260)
         case .dark: Color(hex: 0xEFB8C8)
         case .blue: Color(hex: 0x1F6FEB)
@@ -195,5 +203,12 @@ extension Color {
             green: Double((hex >> 8) & 0xFF) / 255,
             blue: Double(hex & 0xFF) / 255
         )
+    }
+
+    /// 依目前介面的深淺色自動切換的顏色。
+    init(light: Color, dark: Color) {
+        self.init(uiColor: UIColor { traits in
+            UIColor(traits.userInterfaceStyle == .dark ? dark : light)
+        })
     }
 }

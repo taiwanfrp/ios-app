@@ -160,11 +160,15 @@ private struct ThemeChip: View {
         Button(action: action) {
             VStack(spacing: 6) {
                 ZStack {
-                    Circle()
-                        .fill(theme.backgroundColor ?? (theme.colorScheme == .dark ? Color(white: 0.12) : theme.colorScheme == .light ? Color(white: 0.96) : Color(uiColor: .systemBackground)))
-                    Circle()
-                        .fill(theme.accentColor)
-                        .padding(9)
+                    if theme == .system {
+                        // 左半淺色、右半深色，表示會跟隨系統切換
+                        ThemeSwatch(theme: .light)
+                            .mask(alignment: .leading) { Rectangle().frame(width: 22) }
+                        ThemeSwatch(theme: .dark)
+                            .mask(alignment: .trailing) { Rectangle().frame(width: 22) }
+                    } else {
+                        ThemeSwatch(theme: theme)
+                    }
                     if isSelected {
                         Circle()
                             .strokeBorder(Color.accentColor, lineWidth: 3)
@@ -184,6 +188,20 @@ private struct ThemeChip: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: isSelected)
+    }
+}
+
+private struct ThemeSwatch: View {
+    let theme: AppTheme
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(theme.backgroundColor ?? (theme.colorScheme == .dark ? Color(white: 0.12) : Color(white: 0.96)))
+            Circle()
+                .fill(theme.accentColor)
+                .padding(9)
+        }
     }
 }
 

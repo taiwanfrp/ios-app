@@ -33,7 +33,7 @@ TaiwanFRP iOS 版是為 [TaiwanFRP](https://taiwanfrp.me) 免費內網穿透服�
 
 ### 🎨 個人化設定
 
-- **多樣化主題**：內建 9 款主題（極致黑、湖水藍、薄荷綠等），支援跟隨系統深淺色。
+- **多樣化主題**：內建 9 款主題（極致黑、湖水藍、薄荷綠等），「系統」主題會跟隨 iOS 深淺色自動切換。
 - **多國語言**：支援 **繁體中文** 與 **English**，可跟隨系統語言。
 - **自訂頻率**：可調整資料自動更新頻率，App 在背景時自動暫停更新。
 - **更新提醒**：啟動時自動檢查 GitHub Releases 是否有新版本（iOS 無法直接安裝，會引導前往下載頁）。
@@ -48,11 +48,13 @@ TaiwanFRP iOS 版是為 [TaiwanFRP](https://taiwanfrp.me) 免費內網穿透服�
 
 ## 🎨 主題
 
+「系統」主題會跟隨 iOS 的外觀設定，自動切換成「淺色」或「深色」。
+
 | 基本設定 | 深色系風格 | 淺色系風格 |
 |:-------:|:--------:|:--------:|
-| 淺色 | 藍色 | 湖水藍 |
-| 深色 | 綠色 | 薄荷綠 |
-| 系統 | 極致黑 | 極致白 |
+| <img src="screenshots/淺色.png" width="220" alt="淺色"><br>淺色 | <img src="screenshots/藍色.png" width="220" alt="藍色"><br>藍色 | <img src="screenshots/湖水藍.png" width="220" alt="湖水藍"><br>湖水藍 |
+| <img src="screenshots/深色.png" width="220" alt="深色"><br>深色 | <img src="screenshots/綠色.png" width="220" alt="綠色"><br>綠色 | <img src="screenshots/薄荷綠.png" width="220" alt="薄荷綠"><br>薄荷綠 |
+| 跟隨系統 | <img src="screenshots/極致黑.png" width="220" alt="極致黑"><br>極致黑 | <img src="screenshots/極致白.png" width="220" alt="極致白"><br>極致白 |
 
 ## 🛠️ 技術棧
 
@@ -90,15 +92,6 @@ TaiwanFRP iOS 版是為 [TaiwanFRP](https://taiwanfrp.me) 免費內網穿透服�
    ```
 
 也可以直接使用 Xcode 開啟 `Package.swift` 進行開發。
-
-### 自動發佈
-
-推送 `v` 開頭的 tag 後，GitHub Actions 會自動編譯並建立 Release（附上未簽名的 `.ipa`），版本號取自 tag：
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
 
 ## 🤝 貢獻與反饋
 
